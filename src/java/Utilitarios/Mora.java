@@ -28,6 +28,9 @@ public class Mora {
         this.saldoTotal = saldoTotal;
         this.deudaExigible = deudaExigible;
     }
+    
+    //Constructor vacio
+    public Mora(){}
 
     //Metodos Setters
     
