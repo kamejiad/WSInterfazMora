@@ -18,6 +18,14 @@ public class Respuesta {
     private String description;
     private List<Mora> morosos;
 
+    public Respuesta(){
+    }
+    
+    public Respuesta(String estado, String description){
+        this.estado = estado;
+        this.description = description;
+    }
+    
     public Respuesta(String estado, String description, List<Mora> moroso) {
         this.estado = estado;
         this.description = description;

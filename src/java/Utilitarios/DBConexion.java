@@ -9,7 +9,7 @@ import java.sql.SQLException;
  * @author kamejia
  */
 public class DBConexion {
-    private Connection con;
+   /* private Connection con;
     private boolean estadoConexion;
     
     public Connection dBConexion(){// throws ClassNotFoundException, SQLException{
@@ -36,11 +36,11 @@ public class DBConexion {
      * @throws SQLException
      */
     
-    public void dBDesconeccion(){
+   /* public void dBDesconeccion(){
         try{
             this.con.close();
         }catch(SQLException e){
             System.out.println(e);
         }
-    }
+    }*/
 }

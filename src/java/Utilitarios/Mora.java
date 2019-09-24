@@ -19,11 +19,12 @@ public class Mora {
     private int deudaExigible;      //Deuda esxigible: Capital
 
     //Constructor principal
-    public Mora(int numCliente, String numIdentidad, String numCuenta, String fechaInicio, String tipoProducto, int saldoTotal, int deudaExigible) {
+    public Mora(int numCliente, String numIdentidad, String numCuenta, String fechaInicio,String producto, String tipoProducto, int saldoTotal, int deudaExigible) {
         this.numCliente = numCliente;
         this.numIdentidad = numIdentidad;
         this.numCuenta = numCuenta;
         this.fechaInicio = fechaInicio;
+        this.producto = producto;
         this.tipoProducto = tipoProducto;
         this.saldoTotal = saldoTotal;
         this.deudaExigible = deudaExigible;

@@ -14,7 +14,7 @@ import java.util.Properties;
 public class Configuraciones {
     
     //public static int timeoutMinutos;
-    public static String [] propiedades ={"com.ibm.as400.access.AS400JDBCDriver" , "jdbc:as400://","servidorAS400", "DB", "USER", "Password"};
+    /*public static String [] propiedades ={"com.ibm.as400.access.AS400JDBCDriver" , "jdbc:as400://","servidorAS400", "DB", "USER", "Password"};
     public static void loadConfig(){
         try{
             Properties properties = new Properties();
@@ -26,5 +26,5 @@ public class Configuraciones {
         } catch(IOException e){
             System.out.println(e);
         }
-    }
+    }*/
 }
