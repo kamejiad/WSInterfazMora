@@ -14,44 +14,36 @@ import java.util.List;
 public class Respuesta {
     
     //Propiedades
-    private String estado;
-    private String description;
+    private Error error;
     private List<Mora> morosos;
 
+    //Constructors
     public Respuesta(){
     }
     
-    public Respuesta(String estado, String description){
-        this.estado = estado;
-        this.description = description;
+    public Respuesta(Error error){
+        this.error = error;
     }
     
-    public Respuesta(String estado, String description, List<Mora> moroso) {
-        this.estado = estado;
-        this.description = description;
+    public Respuesta(Error error, List<Mora> moroso) {
+        this.error = error;
         this.morosos =  moroso;
     }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+    //Setters
+    public void setError(Error error) {
+        this.error = error;
     }
 
     public void setMorosos(List<Mora> morosos) {
         this.morosos = morosos;
     }
 
-    public String getEstado() {
-        return estado;
+    //Getters
+    public Error getError() {
+        return error;
     }
-
-    public String getDescription() {
-        return description;
-    }
-
+    
     public List<Mora> getMorosos() {
         return morosos;
     }
