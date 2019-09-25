@@ -7,6 +7,12 @@ package PQInterfazMora;
 
 import Utilitarios.Respuesta;
 import Utilitarios.Mora;
+import Utilitarios.DBConexion;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.jws.WebService;
@@ -24,6 +30,10 @@ public class InterfazMora {
     private Respuesta resp;
     private Mora mora;
     private List<Mora> listMora = new ArrayList<>();
+    private Connection con;
+    private ResultSet  rs1;
+    private String codigo1;
+    private DBConexion bd;
     
     /**
      * @param codigo
@@ -32,17 +42,23 @@ public class InterfazMora {
      * @return 
      */
     @WebMethod(operationName = "Response")
-    public Respuesta Response(@WebParam(name = "codigo") String codigo,@WebParam(name = "tipo") String tipo,@WebParam(name = "codAplicacion") String codAplicacion) {
-        return  this.resp;
+    public String Response(@WebParam(name = "codigo") String codigo,@WebParam(name = "tipo") String tipo,@WebParam(name = "codAplicacion") String codAplicacion) {
+   
+          
+        //TO DO  probar la conexion con la base de datos
+        
+        System.out.println(codigo1);
+        consulta();
+        return  this.codigo1;
     }
     
     //Función que comprueba que el código de aplicación exista.
-    public void autorizaAplicacion(String codigo){
+    private void autorizaAplicacion(String codigo){
         
     }
     
     //Metodo que realiza las consultas para devolver el lista de registros.
-    public void consulta(){
-    
+    private void consulta(){
+        //TO DO probar si realiza conexion  
     }
 }

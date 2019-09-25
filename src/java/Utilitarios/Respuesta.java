@@ -15,6 +15,7 @@ public class Respuesta {
     
     //Propiedades
     private Error error;
+    private ClienteCabecera cliente;
     private List<Mora> morosos;
 
     //Constructors
@@ -25,14 +26,19 @@ public class Respuesta {
         this.error = error;
     }
     
-    public Respuesta(Error error, List<Mora> moroso) {
+    public Respuesta(Error error, ClienteCabecera cliente, List<Mora> moroso) {
         this.error = error;
+        this.cliente = cliente;
         this.morosos =  moroso;
     }
 
     //Setters
     public void setError(Error error) {
         this.error = error;
+    }
+
+    public void setCliente(ClienteCabecera cliente) {
+        this.cliente = cliente;
     }
 
     public void setMorosos(List<Mora> morosos) {
@@ -42,6 +48,10 @@ public class Respuesta {
     //Getters
     public Error getError() {
         return error;
+    }
+
+    public ClienteCabecera getCliente() {
+        return cliente;
     }
     
     public List<Mora> getMorosos() {

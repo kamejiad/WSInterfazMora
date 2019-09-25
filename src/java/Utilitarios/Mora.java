@@ -9,8 +9,6 @@ package Utilitarios;
 public class Mora {
     
     //Propiedades del objeto
-    private int numCliente;         //Número de cliente
-    private String numIdentidad;    //Número de Documento Cliente (Identidad)
     private String numCuenta;       //Número de Cuenta del Préstamo/Tarjeta
     private String fechaInicio;     //Fecha Inicio de Mora
     private String producto;        //Producto
@@ -19,9 +17,7 @@ public class Mora {
     private int deudaExigible;      //Deuda esxigible: Capital
 
     //Constructor principal
-    public Mora(int numCliente, String numIdentidad, String numCuenta, String fechaInicio,String producto, String tipoProducto, int saldoTotal, int deudaExigible) {
-        this.numCliente = numCliente;
-        this.numIdentidad = numIdentidad;
+    public Mora(String numCuenta, String fechaInicio,String producto, String tipoProducto, int saldoTotal, int deudaExigible) {
         this.numCuenta = numCuenta;
         this.fechaInicio = fechaInicio;
         this.producto = producto;
@@ -34,15 +30,6 @@ public class Mora {
     public Mora(){}
 
     //Metodos Setters
-    
-    public void setNumCliente(int numCliente) {
-        this.numCliente = numCliente;
-    }
-
-    public void setNumIdentidad(String numIdentidad) {
-        this.numIdentidad = numIdentidad;
-    }
-
     public void setNumCuenta(String numCuenta) {
         this.numCuenta = numCuenta;
     }
@@ -68,15 +55,6 @@ public class Mora {
     }
 
     //Metodos Getters
-    
-    public int getNumCliente() {
-        return numCliente;
-    }
-
-    public String getNumIdentidad() {
-        return numIdentidad;
-    }
-
     public String getNumCuenta() {
         return numCuenta;
     }
@@ -104,6 +82,6 @@ public class Mora {
     //Metodo toString muestra información del objeto
     @Override
     public String toString() {
-        return "Mora{" + "numCliente=" + numCliente + ", numIdentidad=" + numIdentidad + ", numCuenta=" + numCuenta + ", fechaInicio=" + fechaInicio + ", producto=" + producto + ", tipoProducto=" + tipoProducto + ", saldoTotal=" + saldoTotal + ", deudaExigible=" + deudaExigible + '}';
+        return "Mora{" + ", numCuenta=" + numCuenta + ", fechaInicio=" + fechaInicio + ", producto=" + producto + ", tipoProducto=" + tipoProducto + ", saldoTotal=" + saldoTotal + ", deudaExigible=" + deudaExigible + '}';
     }
 }

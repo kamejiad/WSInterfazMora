@@ -6,33 +6,46 @@ package Utilitarios;
  * @author kamejia
  */
 public class Error {
-    private String codError; //codigo del error
-    private String descError; //descripción del error
+    private String codigo; //codigo del error
+    private String descripcion; //descripción del error
+    private String detalleTecnico; //explicación técnica 
 
     //Constructors
-    public Error(String codError, String descError) {
-        this.codError = codError;
-        this.descError = descError;
+
+    public Error(String codigo, String descripcion, String detalleTecnico) {
+        this.codigo = codigo;
+        this.descripcion = descripcion;
+        this.detalleTecnico = detalleTecnico;
     }
 
     public Error() {
     }
 
     //Setters
-    public void setCodError(String codError) {
-        this.codError = codError;
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
     }
 
-    public void setDescError(String descError) {
-        this.descError = descError;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
+
+    public void setDetalleTecnico(String detalleTecnico) {
+        this.detalleTecnico = detalleTecnico;
+    }
+
 
     //Getters
-    public String getCodError() {
-        return codError;
+    public String getCodigo() {
+        return codigo;
     }
 
-    public String getDescError() {
-        return descError;
-    } 
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public String getDetalleTecnico() {
+        return detalleTecnico;
+    }
+
 }
