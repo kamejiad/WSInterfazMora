@@ -6,14 +6,14 @@ package Utilitarios;
  * @author kamejia
  */
 public class Error {
-    private String codigo; //codigo del error
+    private String estado; //codigo del error
     private String descripcion; //descripción del error
     private String detalleTecnico; //explicación técnica 
 
     //Constructors
 
     public Error(String codigo, String descripcion, String detalleTecnico) {
-        this.codigo = codigo;
+        this.estado = codigo;
         this.descripcion = descripcion;
         this.detalleTecnico = detalleTecnico;
     }
@@ -23,7 +23,7 @@ public class Error {
 
     //Setters
     public void setCodigo(String codigo) {
-        this.codigo = codigo;
+        this.estado = codigo;
     }
 
     public void setDescripcion(String descripcion) {
@@ -37,7 +37,7 @@ public class Error {
 
     //Getters
     public String getCodigo() {
-        return codigo;
+        return estado;
     }
 
     public String getDescripcion() {

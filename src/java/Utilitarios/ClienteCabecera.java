@@ -11,13 +11,13 @@ package Utilitarios;
  */
 public class ClienteCabecera {
     //Properties
-    private int numCliente;         //Número de cliente
+    private String numCliente;         //Número de cliente
     private String numIdentidad;    //Número de Documento Cliente (Identidad)
     private String nombre;          //Nombre del cliente
     private String apellido;        //apellido del cliente/nombre de la empresa
 
     //Constructors
-    public ClienteCabecera(int numCliente, String numIdentidad, String nombre, String apellido) {
+    public ClienteCabecera(String numCliente, String numIdentidad, String nombre, String apellido) {
         this.numCliente = numCliente;
         this.numIdentidad = numIdentidad;
         this.nombre = nombre;
@@ -28,7 +28,7 @@ public class ClienteCabecera {
     }
 
     //Setters
-    public void setNumCliente(int numCliente) {
+    public void setNumCliente(String numCliente) {
         this.numCliente = numCliente;
     }
 
@@ -45,7 +45,7 @@ public class ClienteCabecera {
     }
     
     //Getters
-    public int getNumCliente() {
+    public String getNumCliente() {
         return numCliente;
     }
 

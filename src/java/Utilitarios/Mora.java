@@ -25,6 +25,14 @@ public class Mora {
         this.saldoTotal = saldoTotal;
         this.deudaExigible = deudaExigible;
     }
+
+    public Mora(String numCuenta, String fechaInicio, String producto, String tipoProducto, int saldoTotal) {
+        this.numCuenta = numCuenta;
+        this.fechaInicio = fechaInicio;
+        this.producto = producto;
+        this.tipoProducto = tipoProducto;
+        this.saldoTotal = saldoTotal;
+    }
     
     //Constructor vacio
     public Mora(){}
