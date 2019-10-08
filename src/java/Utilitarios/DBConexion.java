@@ -10,7 +10,7 @@ import java.sql.SQLException;
  */
 public class DBConexion {
     private Connection con;
-    private Error error; //Objeto error
+    private Estado estado; //Objeto error
     private String codigo; //codigo del error
     private String descripcion; //descripción del error
     private String detalleTecnico; //explicación técnica 
@@ -29,7 +29,7 @@ public class DBConexion {
             this.codigo = "1111";
             this.descripcion = "Error inesperado en el servicio";
             this.detalleTecnico = "Error producido internamente del servicio";
-            this.error = new Error(this.codigo,this.descripcion,this.detalleTecnico);
+            this.estado = new Estado(this.codigo,this.descripcion,this.detalleTecnico);
             this.con = null;
             return this.con;
         }catch(SQLException e){
@@ -37,7 +37,7 @@ public class DBConexion {
             this.codigo = "1122";
             this.descripcion = "Error de conexión de base de datos";
             this.detalleTecnico = "Asegurese que la base de datos esté siendo";
-            this.error = new Error(this.codigo,this.descripcion,this.detalleTecnico);
+            this.estado = new Estado(this.codigo,this.descripcion,this.detalleTecnico);
             this.con = null;
             return this.con;    
         }   
@@ -56,7 +56,7 @@ public class DBConexion {
         }
     }
 
-    public Error getError() {
-        return error;
+    public Estado getError() {
+        return this.estado;
     }
 }

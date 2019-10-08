@@ -13,24 +13,27 @@ public class Mora {
     private String fechaInicio;     //Fecha Inicio de Mora
     private String producto;        //Producto
     private String tipoProducto;    //Tipo de producto
-    private int saldoTotal;         //Saldo total
-    private int deudaExigible;      //Deuda esxigible: Capital
+    private String descProducto;    //Descripción del producto
+    private double saldoTotal;         //Saldo total
+    private double deudaExigible;      //Deuda esxigible: Capital
 
     //Constructor principal
-    public Mora(String numCuenta, String fechaInicio,String producto, String tipoProducto, int saldoTotal, int deudaExigible) {
+    public Mora(String numCuenta, String fechaInicio,String producto, String tipoProducto, String descProducto, double saldoTotal, double deudaExigible) {
         this.numCuenta = numCuenta;
         this.fechaInicio = fechaInicio;
         this.producto = producto;
         this.tipoProducto = tipoProducto;
+        this.descProducto = descProducto;
         this.saldoTotal = saldoTotal;
         this.deudaExigible = deudaExigible;
     }
 
-    public Mora(String numCuenta, String fechaInicio, String producto, String tipoProducto, int saldoTotal) {
+    public Mora(String numCuenta, String fechaInicio, String producto, String tipoProducto, String descProducto, double saldoTotal) {
         this.numCuenta = numCuenta;
         this.fechaInicio = fechaInicio;
         this.producto = producto;
         this.tipoProducto = tipoProducto;
+        this.descProducto = descProducto;
         this.saldoTotal = saldoTotal;
     }
     
@@ -53,38 +56,46 @@ public class Mora {
     public void setTipoProducto(String tipoProducto) {
         this.tipoProducto = tipoProducto;
     }
+    
+    public void setDescProducto(String descProducto){
+        this.descProducto = descProducto;
+    }
 
-    public void setSaldoTotal(int saldoTotal) {
+    public void setSaldoTotal(double saldoTotal) {
         this.saldoTotal = saldoTotal;
     }
 
-    public void setDeudaExigible(int deudaExigible) {
+    public void setDeudaExigible(double deudaExigible) {
         this.deudaExigible = deudaExigible;
     }
 
     //Metodos Getters
     public String getNumCuenta() {
-        return numCuenta;
+        return this.numCuenta;
     }
 
     public String getFechaInicio() {
-        return fechaInicio;
+        return this.fechaInicio;
     }
 
     public String getProducto() {
-        return producto;
+        return this.producto;
     }
 
     public String getTipoProducto() {
-        return tipoProducto;
+        return this.tipoProducto;
+    }
+    
+    public String getDescProducto(){
+        return this.descProducto;
     }
 
-    public int getSaldoTotal() {
-        return saldoTotal;
+    public double getSaldoTotal() {
+        return this.saldoTotal;
     }
 
-    public int getDeudaExigible() {
-        return deudaExigible;
+    public double getDeudaExigible() {
+        return this.deudaExigible;
     }
 
     //Metodo toString muestra información del objeto

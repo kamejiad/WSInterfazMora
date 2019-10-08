@@ -14,47 +14,52 @@ import java.util.List;
 public class Respuesta {
     
     //Propiedades
-    private Error error;
+    private Estado estado;
     private ClienteCabecera cliente;
-    private List<Mora> morosos;
+    private List<Mora> moroso;
 
     //Constructors
     public Respuesta(){
     }
     
-    public Respuesta(Error error){
-        this.error = error;
+    public Respuesta(Estado estado){
+        this.estado = estado;
     }
     
-    public Respuesta(Error error, ClienteCabecera cliente, List<Mora> moroso) {
-        this.error = error;
+    public Respuesta(Estado estado, ClienteCabecera cliente){
+        this.estado = estado;
         this.cliente = cliente;
-        this.morosos =  moroso;
+    }
+    
+    public Respuesta(Estado estado, ClienteCabecera cliente, List<Mora> moroso) {
+        this.estado = estado;
+        this.cliente = cliente;
+        this.moroso =  moroso;
     }
 
     //Setters
-    public void setError(Error error) {
-        this.error = error;
+    public void setEstado(Estado estado) {
+        this.estado = estado;
     }
 
     public void setCliente(ClienteCabecera cliente) {
         this.cliente = cliente;
     }
 
-    public void setMorosos(List<Mora> morosos) {
-        this.morosos = morosos;
+    public void setMoroso(List<Mora> moroso) {
+        this.moroso = moroso;
     }
 
     //Getters
-    public Error getError() {
-        return error;
+    public Estado getEstado() {
+        return estado;
     }
 
     public ClienteCabecera getCliente() {
         return cliente;
     }
     
-    public List<Mora> getMorosos() {
-        return morosos;
+    public List<Mora> getMoroso() {
+        return moroso;
     }
 }

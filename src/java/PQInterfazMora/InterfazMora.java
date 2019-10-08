@@ -1,16 +1,15 @@
 /*
-Web Service para consultas de prestamos y tarjetas en mora.
-Función principal
-*/
-
+ Web Service para consultas de prestamos y tarjetas en mora.
+ Función principal
+ */
 package PQInterfazMora;
+
 import Utilitarios.Respuesta;
 import Utilitarios.Mora;
 import Utilitarios.DBConexion;
-import Utilitarios.Error;
+import Utilitarios.Estado;
 import Utilitarios.ClienteCabecera;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,10 +29,10 @@ public class InterfazMora {
     //General Properties
     private Respuesta resp;
     private Mora mora;
-    private List<Mora> listMora = new ArrayList<>();
+    private List<Mora> listMora;// = new ArrayList<>();
     private ClienteCabecera encabezado;
 
-    private Error error;
+    private Estado estado;
     //Data Base Properties
     private DBConexion bd;
     private Connection con;
@@ -46,16 +45,15 @@ public class InterfazMora {
     private String nomCliente;
     private String apeCliente;
 
-    private String estado;          //codigo del error
-    private String descripcion;     //descripción del error
-    private String detalleTecnico;  //explicación técnica 
+    private String codigoEstado;          //codigo del error 
 
     private String numCuenta;       //Número de Cuenta del Préstamo/Tarjeta
     private String fechaInicio;     //Fecha Inicio de Mora
     private String producto;        //Producto
     private String tipoProducto;    //Tipo de producto
-    private int saldoTotal;         //Saldo total
-    private int deudaExigible;      //Deuda esxigible: Capital
+    private String descProducto;    //Descripción del producto
+    private double saldoTotal;         //Saldo total
+    private double deudaExigible;      //Deuda esxigible: Capital
 
     /**
      * @param codigo
@@ -64,42 +62,35 @@ public class InterfazMora {
      * @return
      */
     @WebMethod(operationName = "Response")
-    public Respuesta Response(@WebParam(name = "codigo") String codigo, @WebParam(name = "tipo") String tipo, @WebParam(name = "codAplicacion") String codAplicacion) {
+    public Respuesta Response(@WebParam(name = "codigoCliente") String codigoCliente, @WebParam(name = "tipoCodigo") String tipoCodigo, @WebParam(name = "codigoAplicacion") String codAplicacion) {
+        this.resp = null;
+        if (codigoCliente.trim().equals("") || tipoCodigo.trim().equals("") || codAplicacion.trim().equals("")) {
+            this.codigoEstado = "407";
+            this.estado = new Estado(this.codigoEstado);
+            this.resp = new Respuesta(this.estado);
+        } else {
+            if (autorizaAplicacion(codAplicacion.trim(), tipoCodigo.trim().toUpperCase(), codigoCliente.trim())) {
+                this.encabezado = new ClienteCabecera(codCliente, idnCliente, nomCliente, apeCliente);
+         
+                consulta();
 
-        if (autorizaAplicacion(codAplicacion, tipo, codigo)) {
-            //---------------------------------------------------
-            this.encabezado = new ClienteCabecera(codCliente, idnCliente, nomCliente, apeCliente);
-            //---------------------------------------
-            this.estado = "200";
-            this.descripcion = "Exito";
-            this.detalleTecnico = "El proceso se ejecutó correctamente";
-            this.error = new Error(this.estado, this.descripcion, this.detalleTecnico);
-            //--------------------------------/
-            /*this.numCuenta = "1564511"; //Número de Cuenta del Préstamo/Tarjeta
-            this.fechaInicio ="25072019"; //Fecha Inicio de Mora
-            this.producto="4251"; //Producto
-            this.tipoProducto="target 23"; //Tipo de producto
-            this.saldoTotal=554461; //Saldo total
-            this.deudaExigible=2654511;
-            this.mora = new Mora(this.numCuenta,this.fechaInicio,this.producto,this.tipoProducto,this.saldoTotal,this.deudaExigible);
-            *///--------------------------------------
-            //this.listMora.add(mora);
-            //----------------------------------------
-            //this.resp = new Respuesta(this.error,this.encabezado,this.listMora);
-            //---------------------
-            consulta();
-            
-            if(!this.listMora.isEmpty()){
-                this.resp = new Respuesta(this.error,this.encabezado,this.listMora);
+                if (!this.listMora.isEmpty()) {
+                    this.codigoEstado = "200";
+                    this.estado = new Estado(this.codigoEstado);
+                    this.resp = new Respuesta(this.estado, this.encabezado, this.listMora);
+                } else {
+                    this.codigoEstado = "201";
+                    this.estado = new Estado(this.codigoEstado);
+                    this.resp = new Respuesta(this.estado, this.encabezado);
+                }
             }
-            
-        }
-        this.bd.dBDesconeccion();
+            this.bd.dBDesconeccion();
+        }   
         return this.resp;
     }
 
     //Función que comprueba que el código de aplicación exista.
-    private boolean autorizaAplicacion(String codAplicacion, String tipo, String codigo) {
+    private boolean autorizaAplicacion(String codAplicacion, String tipoCodigo, String codigoCliente) {
         boolean paso = false;
         boolean bandera = false;
         this.bd = new DBConexion();
@@ -116,95 +107,99 @@ public class InterfazMora {
             } else {
                 this.rs.close();
                 this.bd.dBDesconeccion();
+                this.codigoEstado = "405";
+                this.estado = new Estado(this.codigoEstado);
+                this.resp = new Respuesta(this.estado);
             }
         } catch (SQLException ex) {
-            this.estado = "4012";
-            this.descripcion = "Error de conexión con la base de datos";
-            this.detalleTecnico = "Es probable que no se haya encontrado el destino de datos";
-            this.error = new Error(this.estado, this.descripcion, this.detalleTecnico);
-            this.resp = new Respuesta(this.error);
+            this.codigoEstado = "4012";
+            this.estado = new Estado(this.codigoEstado);
+            this.resp = new Respuesta(this.estado);
         }
 
         if (bandera) {
-            if ("C".equals(tipo)) {
+            if ("C".equals(tipoCodigo)) {
                 try {
-                    //revision por tipo
-                    this.query = this.con.prepareStatement("select CLINDO,CLINOM,CLIAPE from TLSDTA.CLI where CLINUM=?");
-                    this.query.setString(1, codigo);
+                    this.query = this.con.prepareStatement("SELECT * FROM TLSDTA.CLI WHERE CLINUM=?");
+                    this.query.setString(1, codigoCliente);
                     this.rs = query.executeQuery();
                     if (this.rs.isBeforeFirst()) {
                         while (this.rs.next()) {
                             paso = true;
-                            this.codCliente = codigo;
+
+                            this.codCliente = Integer.toString(this.rs.getInt("CLINUM"));
                             this.idnCliente = this.rs.getString("CLINDO");
                             this.nomCliente = this.rs.getString("CLINOM");
                             this.apeCliente = this.rs.getString("CLIAPE");
                         }
-                        this.rs.close();
                     } else {
+                        this.codigoEstado = "4013";
+                        this.estado = new Estado(this.codigoEstado);
+                        this.resp = new Respuesta(this.estado);
                         this.rs.close();
                         this.bd.dBDesconeccion();
                     }
                 } catch (SQLException ex) {
-                    this.estado = "4012";
-                    this.descripcion = "Error de conexión con la base de datos";
-                    this.detalleTecnico = "Es probable que no se haya encontrado el destino de datos";
-                    this.error = new Error(this.estado, this.descripcion, this.detalleTecnico);
-                    this.resp = new Respuesta(this.error);
+                    this.codigoEstado = "4012";
+                    this.estado = new Estado(this.codigoEstado);
+                    this.resp = new Respuesta(this.estado);
                 }
             } else {
-                if ("T".equals(tipo)) {
+                if ("T".equals(tipoCodigo)) {
                     try {
-                        this.query = this.con.prepareStatement("select * from TLSDTA.CLI where CLINDO=?");
-                        this.query.setString(1, codigo);
+                        this.query = this.con.prepareStatement("SELECT * FROM TLSDTA.CLI WHERE CLINDO=?");
+                        this.query.setString(1, codigoCliente);
                         this.rs = this.query.executeQuery();
                         if (this.rs.isBeforeFirst()) {
                             while (this.rs.next()) {
                                 paso = true;
-                                this.codCliente = this.rs.getString("CLINUM");
-                                this.idnCliente = codigo;
+                                this.codCliente = Integer.toString(this.rs.getInt("CLINUM"));
+                                //this.idnCliente = codigo;
+                                this.idnCliente = this.rs.getString("CLINDO");
                                 this.nomCliente = this.rs.getString("CLINOM");
                                 this.apeCliente = this.rs.getString("CLIAPE");
                             }
                             this.rs.close();
                         } else {
-                            this.estado = "4012";
-                            this.descripcion = "El cliente no ha sido encontrado";
-                            this.detalleTecnico = "El numero de cliente que ha proporcionado no existe en el archivo de moras";
-                            this.error = new Error(this.estado, this.descripcion, this.detalleTecnico);
-                            this.resp = new Respuesta(this.error);
+                            this.codigoEstado = "4013";
+                            this.estado = new Estado(this.codigoEstado);
+                            this.resp = new Respuesta(this.estado);
                             this.rs.close();
-                            
+                            this.bd.dBDesconeccion();
                         }
-                        this.bd.dBDesconeccion();
                     } catch (SQLException ex) {
-                        this.estado = "4012";
-                        this.descripcion = "Error de conexión con la base de datos";
-                        this.detalleTecnico = "Es probable que no se haya encontrado el destino de datos";
-                        this.error = new Error(this.estado, this.descripcion, this.detalleTecnico);
-                        this.resp = new Respuesta(this.error);
+                        this.codigoEstado = "4012";
+                        this.estado = new Estado(this.codigoEstado);
+                        this.resp = new Respuesta(this.estado);
                     }
                 } else {
-                    this.estado = "4011";
-                    this.descripcion = "Error de tipo de busqueda";
-                    this.detalleTecnico = "Debe enviar un tipo de busqueda correcto";
-                    this.error = new Error(this.estado, this.descripcion, this.detalleTecnico);
-                    this.resp = new Respuesta(this.error);
+                    this.codigoEstado = "4011";
+                    this.estado = new Estado(this.codigoEstado);
+                    this.resp = new Respuesta(this.estado);
                     this.bd.dBDesconeccion();
                 }
             }
         }
-        
         return paso;
     }
 
     //Metodo que realiza las consultas para devolver el lista de registros.
     private void consulta() {
-        //TO DO probar si realiza conexion
-
         // Busqueda de prestamos en mora
+        listMora = new ArrayList<>();
         try {
-            this.query = this.con.prepareStatement("select * from TLSDTA.PRO where CLINUM=?");
+            this.query = this.con.prepareStatement("SELECT "
+                    + " CLINUM,"
+                    + " PROCTA,"
+                    + " PROFMA,"
+                    + " PRODUC,"
+                    + " PROTIP,"
+                    + " PROSTO,"
+                    + " MPRODE "
+                    + "FROM TLSDTA.PRO AS A "
+                    + "INNER JOIN TLSDTA.PROM1 AS B "
+                    + "ON A.PRODUC = B.MPROTI  AND A.PROTIP = B.MPRODU "
+                    + "WHERE CLINUM=?");
             this.query.setString(1, this.codCliente);
             this.rs = this.query.executeQuery();
             if (this.rs.isBeforeFirst()) {
@@ -213,23 +208,34 @@ public class InterfazMora {
                     this.fechaInicio = this.rs.getString("PROFMA");
                     this.producto = this.rs.getString("PRODUC");
                     this.tipoProducto = this.rs.getString("PROTIP");
-                    this.saldoTotal = this.rs.getInt("PROSTO");
-                    this.mora = new Mora(this.numCuenta, this.fechaInicio, this.producto, this.tipoProducto, this.saldoTotal);
+                    this.descProducto = this.rs.getString("MPRODE");
+                    this.saldoTotal = this.rs.getDouble("PROSTO");
+                    this.mora = new Mora(this.numCuenta, this.fechaInicio, this.producto, this.tipoProducto, this.descProducto, this.saldoTotal);
                     this.listMora.add(mora);
                 }
-                this.rs.close();
+               this.rs.close();
             }
         } catch (SQLException ex) {
-            this.estado = "4012";
-            this.descripcion = "Error de conexión con la base de datos";
-            this.detalleTecnico = "Es probable que no se haya encontrado el destino de datos";
-            this.error = new Error(this.estado, this.descripcion, this.detalleTecnico);
-            this.resp = new Respuesta(this.error);
+            this.codigoEstado = "4012";
+            this.estado = new Estado(this.codigoEstado);
+            this.resp = new Respuesta(this.estado);
         }
 
         //Busqueda de tarjetas en mora
         try {
-            this.query = this.con.prepareStatement("select * from TLSDTA.TCPRO where CLINUM=?");
+            this.query = this.con.prepareStatement("SELECT "
+                    + " CLINUM,"
+                    + " TPROCTA,"
+                    + " TPROINI,"
+                    + " TPRODUC,"
+                    + " TPROTIP,"
+                    + " TPROSTO,"
+                    + " TPRODEC,"
+                    + " MPRODE "
+                    + "FROM TLSDTA.TCPRO AS A "
+                    + "INNER JOIN TLSDTA.PROM1 AS B "
+                    + "ON A.TPRODUC = B.MPROTI  AND A.TPROTIP = B.MPRODU "
+                    + "WHERE CLINUM=?");
             this.query.setString(1, this.codCliente);
             this.rs = this.query.executeQuery();
             if (this.rs.isBeforeFirst()) {
@@ -238,32 +244,19 @@ public class InterfazMora {
                     this.fechaInicio = this.rs.getString("TPROINI");
                     this.producto = this.rs.getString("TPRODUC");
                     this.tipoProducto = this.rs.getString("TPROTIP");
-                    this.saldoTotal = this.rs.getInt("TPROSTO");
-                    this.deudaExigible = this.rs.getInt("TPRODEC");
-                    this.mora = new Mora(this.numCuenta, this.fechaInicio, this.producto, this.tipoProducto, this.saldoTotal, this.deudaExigible);
+                    this.descProducto = this.rs.getString("MPRODE");
+                    this.saldoTotal = this.rs.getDouble("TPROSTO");
+                    this.deudaExigible = this.rs.getDouble("TPRODEC");
+                    this.mora = new Mora(this.numCuenta, this.fechaInicio, this.producto, this.tipoProducto, this.descProducto, this.saldoTotal, this.deudaExigible);
                     this.listMora.add(mora);
                 }
                 this.rs.close();
                 this.bd.dBDesconeccion();
             }
         } catch (SQLException ex) {
-            this.estado = "4012";
-            this.descripcion = "Error de conexión con la base de datos";
-            this.detalleTecnico = "Es probable que no se haya encontrado el destino de datos";
-            this.error = new Error(this.estado, this.descripcion, this.detalleTecnico);
-            this.resp = new Respuesta(this.error);
+            this.codigoEstado = "4012";
+            this.estado = new Estado(this.codigoEstado);
+            this.resp = new Respuesta(this.estado);
         }
-
-    }
-    
-    private void ingresarEstado(String controlador){
-        switch (controlador) {
-            case "1":
-                break;
-            case "2":
-                break;
-            case "3":
-                break;
-        } 
     }
 }
