@@ -29,7 +29,7 @@ public class InterfazMora {
     //General Properties
     private Respuesta resp;
     private Mora mora;
-    private List<Mora> listMora;// = new ArrayList<>();
+    private List<Mora> listMora;
     private ClienteCabecera encabezado;
 
     private Estado estado;
@@ -63,27 +63,29 @@ public class InterfazMora {
      */
     @WebMethod(operationName = "Response")
     public Respuesta Response(@WebParam(name = "codigoCliente") String codigoCliente, @WebParam(name = "tipoCodigo") String tipoCodigo, @WebParam(name = "codigoAplicacion") String codAplicacion) {
+        
         this.resp = null;
+        
         if (codigoCliente.trim().equals("") || tipoCodigo.trim().equals("") || codAplicacion.trim().equals("")) {
             this.codigoEstado = "407";
             this.estado = new Estado(this.codigoEstado);
             this.resp = new Respuesta(this.estado);
         } else {
+            
             if (autorizaAplicacion(codAplicacion.trim(), tipoCodigo.trim().toUpperCase(), codigoCliente.trim())) {
                 this.encabezado = new ClienteCabecera(codCliente, idnCliente, nomCliente, apeCliente);
-         
-                consulta();
-
+                consulta(); //llamada a la funcion que ejecuta las consultas para la extracción de datos.  
                 if (!this.listMora.isEmpty()) {
                     this.codigoEstado = "200";
                     this.estado = new Estado(this.codigoEstado);
                     this.resp = new Respuesta(this.estado, this.encabezado, this.listMora);
                 } else {
-                    this.codigoEstado = "201";
+                    this.codigoEstado = "204";
                     this.estado = new Estado(this.codigoEstado);
                     this.resp = new Respuesta(this.estado, this.encabezado);
                 }
             }
+            
             this.bd.dBDesconeccion();
         }   
         return this.resp;
@@ -91,14 +93,17 @@ public class InterfazMora {
 
     //Función que comprueba que el código de aplicación exista.
     private boolean autorizaAplicacion(String codAplicacion, String tipoCodigo, String codigoCliente) {
+        
         boolean paso = false;
         boolean bandera = false;
         this.bd = new DBConexion();
         this.con = this.bd.dBConexion();
+        
         try {
-            this.query = this.con.prepareStatement("select * from TLSDTA.TLSAPLC where TLSCOD=?");
+            this.query = this.con.prepareStatement("SELECT * FROM TLSDTA.TLSAPLC WHERE TLSCOD=?");
             this.query.setString(1, codAplicacion);
             this.rs = query.executeQuery();
+            
             if (this.rs.isBeforeFirst()) {
                 while (this.rs.next()) {
                     bandera = true;
@@ -107,49 +112,52 @@ public class InterfazMora {
             } else {
                 this.rs.close();
                 this.bd.dBDesconeccion();
-                this.codigoEstado = "405";
+                this.codigoEstado = "401";
                 this.estado = new Estado(this.codigoEstado);
                 this.resp = new Respuesta(this.estado);
             }
+            
         } catch (SQLException ex) {
-            this.codigoEstado = "4012";
+            this.codigoEstado = "402";
             this.estado = new Estado(this.codigoEstado);
             this.resp = new Respuesta(this.estado);
         }
-
+        
         if (bandera) {
             if ("C".equals(tipoCodigo)) {
                 try {
                     this.query = this.con.prepareStatement("SELECT * FROM TLSDTA.CLI WHERE CLINUM=?");
                     this.query.setString(1, codigoCliente);
                     this.rs = query.executeQuery();
+                    
                     if (this.rs.isBeforeFirst()) {
                         while (this.rs.next()) {
                             paso = true;
-
                             this.codCliente = Integer.toString(this.rs.getInt("CLINUM"));
                             this.idnCliente = this.rs.getString("CLINDO");
                             this.nomCliente = this.rs.getString("CLINOM");
                             this.apeCliente = this.rs.getString("CLIAPE");
                         }
                     } else {
-                        this.codigoEstado = "4013";
+                        this.codigoEstado = "403";
                         this.estado = new Estado(this.codigoEstado);
                         this.resp = new Respuesta(this.estado);
                         this.rs.close();
                         this.bd.dBDesconeccion();
                     }
+                    
                 } catch (SQLException ex) {
-                    this.codigoEstado = "4012";
+                    this.codigoEstado = "402";
                     this.estado = new Estado(this.codigoEstado);
                     this.resp = new Respuesta(this.estado);
                 }
             } else {
-                if ("T".equals(tipoCodigo)) {
+                if ("I".equals(tipoCodigo)) {
                     try {
                         this.query = this.con.prepareStatement("SELECT * FROM TLSDTA.CLI WHERE CLINDO=?");
                         this.query.setString(1, codigoCliente);
                         this.rs = this.query.executeQuery();
+                        
                         if (this.rs.isBeforeFirst()) {
                             while (this.rs.next()) {
                                 paso = true;
@@ -161,19 +169,19 @@ public class InterfazMora {
                             }
                             this.rs.close();
                         } else {
-                            this.codigoEstado = "4013";
+                            this.codigoEstado = "403";
                             this.estado = new Estado(this.codigoEstado);
                             this.resp = new Respuesta(this.estado);
                             this.rs.close();
                             this.bd.dBDesconeccion();
-                        }
+                        }                       
                     } catch (SQLException ex) {
-                        this.codigoEstado = "4012";
+                        this.codigoEstado = "402";
                         this.estado = new Estado(this.codigoEstado);
                         this.resp = new Respuesta(this.estado);
                     }
                 } else {
-                    this.codigoEstado = "4011";
+                    this.codigoEstado = "404";
                     this.estado = new Estado(this.codigoEstado);
                     this.resp = new Respuesta(this.estado);
                     this.bd.dBDesconeccion();
@@ -183,7 +191,7 @@ public class InterfazMora {
         return paso;
     }
 
-    //Metodo que realiza las consultas para devolver el lista de registros.
+    //Método que realiza las consultas para devolver el lista de registros.
     private void consulta() {
         // Busqueda de prestamos en mora
         listMora = new ArrayList<>();
@@ -202,6 +210,7 @@ public class InterfazMora {
                     + "WHERE CLINUM=?");
             this.query.setString(1, this.codCliente);
             this.rs = this.query.executeQuery();
+            
             if (this.rs.isBeforeFirst()) {
                 while (this.rs.next()) {
                     this.numCuenta = this.rs.getString("PROCTA");
@@ -216,11 +225,10 @@ public class InterfazMora {
                this.rs.close();
             }
         } catch (SQLException ex) {
-            this.codigoEstado = "4012";
+            this.codigoEstado = "402";
             this.estado = new Estado(this.codigoEstado);
             this.resp = new Respuesta(this.estado);
         }
-
         //Busqueda de tarjetas en mora
         try {
             this.query = this.con.prepareStatement("SELECT "
@@ -238,6 +246,7 @@ public class InterfazMora {
                     + "WHERE CLINUM=?");
             this.query.setString(1, this.codCliente);
             this.rs = this.query.executeQuery();
+            
             if (this.rs.isBeforeFirst()) {
                 while (this.rs.next()) {
                     this.numCuenta = this.rs.getString("TPROCTA");
@@ -254,7 +263,7 @@ public class InterfazMora {
                 this.bd.dBDesconeccion();
             }
         } catch (SQLException ex) {
-            this.codigoEstado = "4012";
+            this.codigoEstado = "402";
             this.estado = new Estado(this.codigoEstado);
             this.resp = new Respuesta(this.estado);
         }

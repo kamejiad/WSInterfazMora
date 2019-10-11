@@ -10,10 +10,6 @@ import java.sql.SQLException;
  */
 public class DBConexion {
     private Connection con;
-    private Estado estado; //Objeto error
-    private String codigo; //codigo del error
-    private String descripcion; //descripción del error
-    private String detalleTecnico; //explicación técnica 
     
     public Connection dBConexion(){// throws ClassNotFoundException, SQLException{
         try{
@@ -23,24 +19,10 @@ public class DBConexion {
             ";user="+  Configuraciones.propiedades[3] +
             ";password="+  Configuraciones.propiedades[4] +  ";";
             this.con = DriverManager.getConnection(ConnectionURL);
-            return this.con;
-        }catch(ClassNotFoundException e ){
+        }catch(ClassNotFoundException | SQLException e ){
             System.out.println(e);
-            this.codigo = "1111";
-            this.descripcion = "Error inesperado en el servicio";
-            this.detalleTecnico = "Error producido internamente del servicio";
-            this.estado = new Estado(this.codigo,this.descripcion,this.detalleTecnico);
-            this.con = null;
-            return this.con;
-        }catch(SQLException e){
-            System.out.println(e);
-            this.codigo = "1122";
-            this.descripcion = "Error de conexión de base de datos";
-            this.detalleTecnico = "Asegurese que la base de datos esté siendo";
-            this.estado = new Estado(this.codigo,this.descripcion,this.detalleTecnico);
-            this.con = null;
-            return this.con;    
         }   
+        return this.con;
     }
 
     /**
@@ -54,9 +36,5 @@ public class DBConexion {
         }catch(SQLException e){
             System.out.println(e);
         }
-    }
-
-    public Estado getError() {
-        return this.estado;
     }
 }

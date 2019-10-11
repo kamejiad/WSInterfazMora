@@ -8,7 +8,7 @@ package Utilitarios;
  */
 public class Mora {
     
-    //Propiedades del objeto
+    //Properties
     private String numCuenta;       //Número de Cuenta del Préstamo/Tarjeta
     private String fechaInicio;     //Fecha Inicio de Mora
     private String producto;        //Producto
@@ -17,7 +17,7 @@ public class Mora {
     private double saldoTotal;         //Saldo total
     private double deudaExigible;      //Deuda esxigible: Capital
 
-    //Constructor principal
+    //Constructors
     public Mora(String numCuenta, String fechaInicio,String producto, String tipoProducto, String descProducto, double saldoTotal, double deudaExigible) {
         this.numCuenta = numCuenta;
         this.fechaInicio = fechaInicio;
@@ -37,10 +37,10 @@ public class Mora {
         this.saldoTotal = saldoTotal;
     }
     
-    //Constructor vacio
+    //Empty constructor
     public Mora(){}
 
-    //Metodos Setters
+    //Setters
     public void setNumCuenta(String numCuenta) {
         this.numCuenta = numCuenta;
     }
@@ -69,7 +69,7 @@ public class Mora {
         this.deudaExigible = deudaExigible;
     }
 
-    //Metodos Getters
+    //Getters
     public String getNumCuenta() {
         return this.numCuenta;
     }
@@ -98,7 +98,7 @@ public class Mora {
         return this.deudaExigible;
     }
 
-    //Metodo toString muestra información del objeto
+    //toString
     @Override
     public String toString() {
         return "Mora{" + ", numCuenta=" + numCuenta + ", fechaInicio=" + fechaInicio + ", producto=" + producto + ", tipoProducto=" + tipoProducto + ", saldoTotal=" + saldoTotal + ", deudaExigible=" + deudaExigible + '}';

@@ -6,6 +6,7 @@ package Utilitarios;
  */
 public class Estado {
 
+    //Properties
     private String codigoEstado; //codigo del error
     private String descripcion; //descripción del error
     private String detalleTecnico; //explicación técnica 
@@ -53,15 +54,15 @@ public class Estado {
 
     private void asignarEstado() {
         switch (this.codigoEstado) {
-            case "4012":
+            case "402":
                 this.descripcion = "Error de conexión con la base de datos";
                 this.detalleTecnico = "Es probable que no se haya encontrado el destino de datos";
                 break;
-            case "4011":
+            case "404":
                 this.descripcion = "Error de tipo de busqueda";
                 this.detalleTecnico = "Debe enviar un tipo de busqueda correcto";
                 break;
-            case "4013":
+            case "403":
                 this.descripcion = "El cliente no ha sido encontrado";
                 this.detalleTecnico = "El numero de cliente que ha proporcionado no existe en el archivo de moras";
                 break;
@@ -69,11 +70,11 @@ public class Estado {
                 this.descripcion = "Éxito";
                 this.detalleTecnico = "El proceso se ejecutó correctamente";
                 break;
-            case "201":
+            case "204":
                 this.descripcion = "Éxito, sin resultados de la busqueda";
                 this.detalleTecnico = "No hay resultados para la busqueda";
                 break;
-            case "405":
+            case "401":
                 this.descripcion = "Error de permisos de aplicación";
                 this.detalleTecnico = "El codigo de aplicación enviado no tiene permisos";
                 break;

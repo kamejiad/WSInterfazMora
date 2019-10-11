@@ -13,10 +13,10 @@ import java.util.List;
  */
 public class Respuesta {
     
-    //Propiedades
+    //Properties
     private Estado estado;
     private ClienteCabecera cliente;
-    private List<Mora> moroso;
+    private List<Mora> mora;
 
     //Constructors
     public Respuesta(){
@@ -31,10 +31,10 @@ public class Respuesta {
         this.cliente = cliente;
     }
     
-    public Respuesta(Estado estado, ClienteCabecera cliente, List<Mora> moroso) {
+    public Respuesta(Estado estado, ClienteCabecera cliente, List<Mora> mora) {
         this.estado = estado;
         this.cliente = cliente;
-        this.moroso =  moroso;
+        this.mora =  mora;
     }
 
     //Setters
@@ -46,8 +46,8 @@ public class Respuesta {
         this.cliente = cliente;
     }
 
-    public void setMoroso(List<Mora> moroso) {
-        this.moroso = moroso;
+    public void setMora(List<Mora> mora) {
+        this.mora = mora;
     }
 
     //Getters
@@ -59,7 +59,7 @@ public class Respuesta {
         return cliente;
     }
     
-    public List<Mora> getMoroso() {
-        return moroso;
+    public List<Mora> getMora() {
+        return mora;
     }
 }
