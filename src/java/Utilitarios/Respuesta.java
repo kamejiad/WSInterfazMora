@@ -1,65 +1,105 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Utilitarios;
 
 import java.util.List;
 
 /**
+ * Clase que representa la respuesta que retorna el servicio
  *
  * @author kamejia
  */
 public class Respuesta {
-    
-    //Properties
-    private Estado estado;
-    private ClienteCabecera cliente;
-    private List<Mora> mora;
 
-    //Constructors
-    public Respuesta(){
+    //Properties
+    private Estado estado;              //Objeto que representa el estado de la respuesta
+    private ClienteCabecera cliente;    //Objeto que representa los datos generales del cliente
+    private List<Mora> mora;            //Objeto que almacena la lista de productos en mora para el cliente
+
+    /**
+     * Constructor por defecto
+     */
+    public Respuesta() {
     }
-    
-    public Respuesta(Estado estado){
+
+    /**
+     * Constructor usado cuando no hay resultados del servicio y se retorna solo
+     * el estado
+     *
+     * @param estado
+     */
+    public Respuesta(Estado estado) {
         this.estado = estado;
     }
-    
-    public Respuesta(Estado estado, ClienteCabecera cliente){
+
+    /**
+     * Constructor usado para retornar solo el estado y la información general
+     * del cliente
+     *
+     * @param estado
+     * @param cliente
+     */
+    public Respuesta(Estado estado, ClienteCabecera cliente) {
         this.estado = estado;
         this.cliente = cliente;
     }
-    
+
+    /**
+     * constructor usado en caso de éxito del servicio
+     *
+     * @param estado
+     * @param cliente
+     * @param mora
+     */
     public Respuesta(Estado estado, ClienteCabecera cliente, List<Mora> mora) {
         this.estado = estado;
         this.cliente = cliente;
-        this.mora =  mora;
+        this.mora = mora;
     }
 
-    //Setters
+    /**
+     *
+     * @param estado
+     */
     public void setEstado(Estado estado) {
         this.estado = estado;
     }
 
+    /**
+     *
+     * @param cliente
+     */
     public void setCliente(ClienteCabecera cliente) {
         this.cliente = cliente;
     }
 
+    /**
+     *
+     * @param mora
+     */
     public void setMora(List<Mora> mora) {
         this.mora = mora;
     }
 
-    //Getters
+    /**
+     *
+     * @return estado
+     */
     public Estado getEstado() {
-        return estado;
+        return this.estado;
     }
 
+    /**
+     *
+     * @return cliente
+     */
     public ClienteCabecera getCliente() {
-        return cliente;
+        return this.cliente;
     }
-    
+
+    /**
+     *
+     * @return mora
+     */
     public List<Mora> getMora() {
-        return mora;
+        return this.mora;
     }
 }
